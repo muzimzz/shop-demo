@@ -1,6 +1,7 @@
 package com.ureca.shopdemo.domain.member.dto;
 
 import com.ureca.shopdemo.domain.member.Member;
+import com.ureca.shopdemo.domain.member.MemberStatus;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -28,6 +29,7 @@ public class MemberJoinRequest {
                 .password(encodedPassword)
                 .email(this.email)
                 .telno(this.telno)
+                .status(MemberStatus.ACTIVE)
                 .build();
     }
 

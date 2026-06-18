@@ -25,10 +25,12 @@ public class Member extends BaseTimeEntity {
     @Column(nullable = false)
     private String password;
 
+    @Column(unique = true)
     private String email;
 
     private String telno;
 
+    @Enumerated(EnumType.STRING)
     private MemberStatus status;
 
     private LocalDateTime expiredAt;

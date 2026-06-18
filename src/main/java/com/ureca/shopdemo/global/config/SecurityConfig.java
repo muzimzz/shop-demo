@@ -25,11 +25,25 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
                 )
 
-                .formLogin(form -> form.disable())
+                .formLogin(form -> form
+                        .loginPage("/login")                  // 기본 로그인 HTML 페이지 생성 방지
+                        .loginProcessingUrl("/member/login")  // POST 요청 받을 URL
+                        .usernameParameter("email")           // 기본값이 username이라서 email로 바꿔줌
+                        .passwordParameter("password")
+                        .successHandler((req, res, auth) -> res.setStatus(200))  // 성공시 200 반환
+                        .failureHandler((req, res, ex) -> res.setStatus(401))    // 실패시 401 반환
+                        .permitAll()                          // /login 접근 허용
+                )
 
                 .httpBasic(basic -> basic.disable())
 
+                .exceptionHandling(ex -> ex
+                        .authenticationEntryPoint((req, res, authException) -> res.setStatus(401))
+                )
+
                 ;
+
+        return http.build();
     }
 
 

@@ -43,7 +43,7 @@ public class MemberService {
             MemberAddress address = MemberAddress.builder()
                     .member(savedMember)
                     .roadAddress(request.getRoadAddress())
-                    .detailAddress(request.getRoadAddress())
+                    .detailAddress(request.getDetailAddress())
                     .isDefault(true)
                     .build();
 

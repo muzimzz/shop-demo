@@ -13,9 +13,9 @@ import java.time.LocalDateTime;
 @Builder
 public class MemberResponse {
 
-    private String name;
+    private Long id;
 
-    private String password;
+    private String name;
 
     private String email;
 
@@ -29,6 +29,7 @@ public class MemberResponse {
 
     public static MemberResponse toDto (Member member) {
         return MemberResponse.builder()
+                .id(member.getId())
                 .name(member.getName())
                 .email(member.getEmail())
                 .telno(member.getTelno())

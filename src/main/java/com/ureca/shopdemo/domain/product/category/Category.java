@@ -1,4 +1,4 @@
-package com.ureca.shopdemo.domain.product;
+package com.ureca.shopdemo.domain.product.category;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;

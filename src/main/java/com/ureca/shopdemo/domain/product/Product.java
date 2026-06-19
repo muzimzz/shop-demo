@@ -1,11 +1,11 @@
 package com.ureca.shopdemo.domain.product;
 
 import com.ureca.shopdemo.domain.admin.Admin;
+import com.ureca.shopdemo.domain.product.category.Category;
+import com.ureca.shopdemo.domain.product.dto.ProductUpdateRequest;
 import com.ureca.shopdemo.global.entity.BaseTimeEntity;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
@@ -13,6 +13,8 @@ import java.time.LocalDateTime;
 @Table(name = "product")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@Builder
 public class Product extends BaseTimeEntity {
 
     @Id
@@ -47,4 +49,21 @@ public class Product extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private ProductStatus status;
+
+    public void updateProduct(ProductUpdateRequest request, Category category) {
+        this.name = request.getName();
+        this.price = request.getPrice();
+        this.stockQuantity = request.getStockQuantity();
+        this.category = category;
+        this.expirationDate = request.getExpirationDate();
+        this.detail = request.getDetail();
+        // 재고 0이면 무조건 품절, 아니면 요청한 status 적용
+        this.status = this.stockQuantity == 0
+                ? ProductStatus.SOLD_OUT
+                : ProductStatus.valueOf(request.getStatus());
+    }
+
+    public void softDeleteProduct() {
+        this.status = ProductStatus.DISCONTINUED;
+    }
 }

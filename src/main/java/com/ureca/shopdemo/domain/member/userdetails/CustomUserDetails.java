@@ -17,6 +17,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CustomUserDetails implements UserDetails, Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     private final Member member;
 
     // Todo: admin 구현 후 설정

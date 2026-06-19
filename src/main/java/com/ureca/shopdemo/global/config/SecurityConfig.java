@@ -16,7 +16,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) {
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
 
@@ -33,6 +33,13 @@ public class SecurityConfig {
                         .successHandler((req, res, auth) -> res.setStatus(200))  // 성공시 200 반환
                         .failureHandler((req, res, ex) -> res.setStatus(401))    // 실패시 401 반환
                         .permitAll()                          // /login 접근 허용
+                )
+
+                .logout(logout -> logout
+                        .logoutUrl("/member/logout")                                    // POST /member/logout 으로 로그아웃
+                        .logoutSuccessHandler((req, res, auth) -> res.setStatus(200))  // 성공시 리다이렉트 대신 200 반환
+                        .deleteCookies("SESSION")   // 쿠키 삭제: JSESSIONID가 기본값이지만 스프링이 처리
+                        .invalidateHttpSession(true)                 // 세션 무효화: default
                 )
 
                 .httpBasic(basic -> basic.disable())

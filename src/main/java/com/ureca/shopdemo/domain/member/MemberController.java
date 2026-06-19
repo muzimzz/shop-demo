@@ -2,9 +2,11 @@ package com.ureca.shopdemo.domain.member;
 
 import com.ureca.shopdemo.domain.member.dto.MemberJoinRequest;
 import com.ureca.shopdemo.domain.member.dto.MemberResponse;
+import com.ureca.shopdemo.domain.member.userdetails.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -23,8 +25,8 @@ public class MemberController {
 
     @DeleteMapping("/withdraw")
     public ResponseEntity<Void> withdraw(@RequestParam String password,
-                                         @RequestParam Long memberId) {
-        memberService.withdraw(password, memberId);
+                                         @AuthenticationPrincipal CustomUserDetails userDetails) {
+        memberService.withdraw(password, userDetails.getMember().getId());
         return ResponseEntity.status(HttpStatus.NO_CONTENT)
                 .build();
     }

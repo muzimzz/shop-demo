@@ -2,8 +2,6 @@ package com.ureca.shopdemo.domain.member.userdetails;
 
 import com.ureca.shopdemo.domain.member.Member;
 import com.ureca.shopdemo.domain.member.MemberRepository;
-import com.ureca.shopdemo.global.exception.ErrorCode;
-import com.ureca.shopdemo.global.exception.GeneralException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -19,7 +17,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Member member = memberRepository.findByEmail(username)
-                .orElseThrow(() -> new GeneralException(ErrorCode.MEMBER_NOT_FOUND));
+                .orElseThrow(() -> new UsernameNotFoundException("존재하지 않는 회원입니다."));
 
         return new CustomUserDetails(member);
     }

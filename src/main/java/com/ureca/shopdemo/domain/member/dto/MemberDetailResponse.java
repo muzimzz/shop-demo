@@ -1,7 +1,8 @@
 package com.ureca.shopdemo.domain.member.dto;
 
 import com.ureca.shopdemo.domain.member.Member;
-import com.ureca.shopdemo.domain.member.MemberAddress;
+import com.ureca.shopdemo.domain.member.address.MemberAddress;
+import com.ureca.shopdemo.domain.member.address.dto.MemberAddressResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

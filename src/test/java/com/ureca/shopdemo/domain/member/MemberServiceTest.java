@@ -1,5 +1,6 @@
 package com.ureca.shopdemo.domain.member;
 
+import com.ureca.shopdemo.domain.member.address.MemberAddressRepository;
 import com.ureca.shopdemo.domain.member.dto.MemberJoinRequest;
 import com.ureca.shopdemo.domain.member.dto.MemberResponse;
 import com.ureca.shopdemo.global.exception.ErrorCode;

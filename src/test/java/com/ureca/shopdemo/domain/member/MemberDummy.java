@@ -47,16 +47,4 @@ public class MemberDummy {
 
         return request;
     }
-
-    public static MemberJoinRequest createInvalidPasswordConfirmMemberJoinRequest() {
-
-        MemberJoinRequest request = new MemberJoinRequest();
-        ReflectionTestUtils.setField(request, "name", "홍길동비밀번호불일치");
-        ReflectionTestUtils.setField(request, "email", "test@example.com");
-        ReflectionTestUtils.setField(request, "password", "test");
-        ReflectionTestUtils.setField(request, "passwordConfirm", "test!!");
-        ReflectionTestUtils.setField(request, "telno", "3");
-
-        return request;
-    }
 }

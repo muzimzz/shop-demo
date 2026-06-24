@@ -1,5 +1,7 @@
 package com.ureca.shopdemo.domain.member;
 
+import com.ureca.shopdemo.domain.member.address.MemberAddress;
+import com.ureca.shopdemo.domain.member.address.MemberAddressRepository;
 import com.ureca.shopdemo.domain.member.dto.MemberJoinRequest;
 import com.ureca.shopdemo.domain.member.dto.MemberResponse;
 import com.ureca.shopdemo.global.exception.ErrorCode;
@@ -16,7 +18,6 @@ public class MemberService {
 
     private final PasswordEncoder passwordEncoder;
     private final MemberRepository memberRepository;
-    private final MemberAddressRepository memberAddressRepository;
 
     // 회원가입
     public MemberResponse join(MemberJoinRequest request) {
@@ -38,19 +39,6 @@ public class MemberService {
         String encodedPassword = passwordEncoder.encode(request.getPassword());
 
         Member savedMember = memberRepository.save(request.toEntity(encodedPassword));
-
-        if (request.getRoadAddress() != null) {
-            MemberAddress address = MemberAddress.builder()
-                    .member(savedMember)
-                    .roadAddress(request.getRoadAddress())
-                    .detailAddress(request.getDetailAddress())
-                    .isDefault(true)
-                    .build();
-
-            memberAddressRepository.save(address);
-        }
-
-
 
         return MemberResponse.toDto(savedMember);
     }

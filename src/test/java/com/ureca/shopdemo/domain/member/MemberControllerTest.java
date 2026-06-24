@@ -1,15 +1,11 @@
 package com.ureca.shopdemo.domain.member;
 
-import com.jayway.jsonpath.JsonPath;
 import com.ureca.shopdemo.domain.member.dto.MemberJoinRequest;
 import com.ureca.shopdemo.global.exception.ErrorCode;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
-import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.http.MediaType;
@@ -24,8 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @Transactional
-@WithMockUser
-// @WebMvcTest
+@WithMockCustomUser  // memberId=1L 고정, 모든 테스트에 적용
 class MemberControllerTest {
 
     @Autowired
@@ -34,43 +29,69 @@ class MemberControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    // ====== 회원가입 ======
+
     @Test
-    void 회원가입_회원탈퇴_플로우() throws Exception {
-        // 회원가입
-        MemberJoinRequest memberJoinRequest = MemberDummy.createMemberJoinRequest();
-        String jsonContent = objectMapper.writeValueAsString(memberJoinRequest);
-
-        String responseBody = mockMvc.perform(post("/member/join")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(jsonContent))
-                    .andExpect(status().isCreated())
-                    .andReturn()
-                    .getResponse()
-                    .getContentAsString();
-
-        Long generatedMemberId = JsonPath.parse(responseBody).read("$.id", Long.class);
-
-        // 이메일 중복으로 회원가입 실패
-        memberJoinRequest = MemberDummy.createDuplicatedEmailMemberJoinRequest();
-        jsonContent = objectMapper.writeValueAsString(memberJoinRequest);
-
+    void 회원가입_성공() throws Exception {
         mockMvc.perform(post("/member/join")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(jsonContent))
+                        .content(objectMapper.writeValueAsString(
+                                MemberDummy.createMemberJoinRequest())))
+                .andDo(print())
+                .andExpect(status().isCreated());
+    }
+
+    @Test
+    void 회원가입_이메일중복_실패() throws Exception {
+        // 먼저 한 명 가입
+        mockMvc.perform(post("/member/join")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(
+                                MemberDummy.createMemberJoinRequest())))
+                .andExpect(status().isCreated());
+
+        // 같은 이메일로 재가입 시도
+        mockMvc.perform(post("/member/join")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(
+                                MemberDummy.createDuplicatedEmailMemberJoinRequest())))
+                .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message").value(ErrorCode.DUPLICATE_EMAIL.getMessage()));
+    }
 
-        // Todo: 시큐리티 문제로 401: ??
-//        // 비밀번호 불일치로 회원탈퇴 실패
-//        mockMvc.perform(delete("/member/withdraw")
-//                        .param("password", "test!!")
-//                        .param("memberId", String.valueOf(generatedMemberId)))
-//                .andExpect(status().isBadRequest())
-//                .andExpect(jsonPath("$.message").value(ErrorCode.INVALID_PASSWORD.getMessage()));
-//
-//        mockMvc.perform(delete("/member/withdraw")
-//                        .param("password", "test")
-//                        .param("memberId", "1"))
-//                .andExpect(status().isNoContent());
+    // ====== 회원탈퇴 ======
+
+    @Test
+    void 회원탈퇴_성공() throws Exception {
+        // 가입 → H2 auto_increment로 memberId=1L 생성
+        mockMvc.perform(post("/member/join")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(
+                                MemberDummy.createMemberJoinRequest())))
+                .andExpect(status().isCreated());
+
+        // @WithMockCustomUser의 memberId=1L과 일치 → .with() 불필요
+        mockMvc.perform(delete("/member/withdraw")
+                        .param("password", "test"))
+                .andDo(print())
+                .andExpect(status().isNoContent());
+    }
+
+    @Test
+    void 회원탈퇴_비밀번호불일치_실패() throws Exception {
+        // 가입
+        mockMvc.perform(post("/member/join")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(
+                                MemberDummy.createMemberJoinRequest())))
+                .andExpect(status().isCreated());
+
+        // 틀린 비밀번호로 탈퇴 시도
+        mockMvc.perform(delete("/member/withdraw")
+                        .param("password", "test!!"))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value(ErrorCode.INVALID_PASSWORD.getMessage()));
     }
 }

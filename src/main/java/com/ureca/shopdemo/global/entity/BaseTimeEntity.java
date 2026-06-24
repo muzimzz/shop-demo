@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 @Getter
 public abstract class BaseTimeEntity implements Serializable {
 
+    // redis
     private static final long serialVersionUID = 1L;
 
     @CreatedDate

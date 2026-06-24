@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/member")
-public class MemberController {
+public class MemberController {     // Todo: 로그인 커스텀 구현
 
     private final MemberService memberService;
 

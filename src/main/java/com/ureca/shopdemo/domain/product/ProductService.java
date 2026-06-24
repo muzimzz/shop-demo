@@ -86,16 +86,16 @@ public class ProductService {
 
     // ==================== User ====================
 
-    // [우선순위: 상] 상품 목록 조회 (카테고리, 정렬, 페이징)
-    @Transactional(readOnly = true)
-    public List<ProductResponse> getProducts() {}
-
-    // [우선순위: 상] 상품 상세 조회
-    @Transactional(readOnly = true)
-    public ProductResponse getProduct() {}
-
-    // [우선순위: 상] 상품 검색
-    @Transactional(readOnly = true)
-    public List<ProductResponse> searchProducts() {}
+//    // [우선순위: 상] 상품 목록 조회 (카테고리, 정렬, 페이징)
+//    @Transactional(readOnly = true)
+//    public List<ProductResponse> getProducts() {}
+//
+//    // [우선순위: 상] 상품 상세 조회
+//    @Transactional(readOnly = true)
+//    public ProductResponse getProduct() {}
+//
+//    // [우선순위: 상] 상품 검색
+//    @Transactional(readOnly = true)
+//    public List<ProductResponse> searchProducts() {}
 }
 

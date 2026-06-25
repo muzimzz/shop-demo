@@ -2,16 +2,17 @@ package com.ureca.shopdemo.domain.member.address;
 
 import com.ureca.shopdemo.domain.member.Member;
 import com.ureca.shopdemo.domain.member.address.dto.MemberAddressUpdateRequest;
+import com.ureca.shopdemo.global.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "member_address")
+@Table(name = "address")   // member_address → address
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
-public class MemberAddress {
+public class MemberAddress extends BaseTimeEntity {    // BaseTimeEntity 추가
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,7 +35,6 @@ public class MemberAddress {
     @Column(nullable = false)
     private String roadAddress;
 
-    @Column(nullable = true)
     private String detailAddress;
 
     @Column(nullable = false)

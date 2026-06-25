@@ -1,7 +1,7 @@
 package com.ureca.shopdemo.domain.refund;
 
-import com.ureca.shopdemo.domain.admin.Admin;
-import com.ureca.shopdemo.domain.order.Order;
+import com.ureca.shopdemo.domain.claim.Claim;
+import com.ureca.shopdemo.domain.order.Payment;
 import com.ureca.shopdemo.global.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -18,29 +18,26 @@ public class Refund extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "return_id")
+    @Column(name = "refund_id")
     private Long id;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "order_id", nullable = false)
-    private Order order;
+    @JoinColumn(name = "payment_id", nullable = false)
+    private Payment payment;            // order → payment
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "admin_id")
-    private Admin admin;
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private RefundReasonType reasonType;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "claim_id", nullable = false)
+    private Claim claim;                // admin → claim (reason/content는 Claim으로 이동)
 
     @Column(nullable = false)
-    private String content;
+    private int amount;                 // refundAmount → amount
+
+    @Column(nullable = false)
+    private int shippingDeduction = 0;  // 추가 (배송비 차감액)
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private RefundStatus status;
 
-    private Integer refundAmount;
-
-    private LocalDateTime processedAt;
+    private LocalDateTime refundedAt;   // processedAt → refundedAt
 }

@@ -1,7 +1,6 @@
 package com.ureca.shopdemo.domain.member.dto;
 
 import com.ureca.shopdemo.domain.member.Member;
-import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,24 +18,20 @@ public class MemberResponse {
 
     private String email;
 
-    private String telno;
+    private String phone;
 
-    private LocalDateTime expiredAt;
-
-    private boolean isBlocked = false;
+    private boolean isBlocked;
 
     private LocalDateTime blockedAt;
 
-    public static MemberResponse toDto (Member member) {
+    public static MemberResponse toDto(Member member) {
         return MemberResponse.builder()
                 .id(member.getId())
                 .name(member.getName())
                 .email(member.getEmail())
-                .telno(member.getTelno())
-                .expiredAt(member.getExpiredAt())
+                .phone(member.getPhone())
                 .isBlocked(member.isBlocked())
                 .blockedAt(member.getBlockedAt())
                 .build();
     }
-
 }

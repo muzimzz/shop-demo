@@ -31,7 +31,6 @@ public class ProductService {
 
     // ==================== Admin ====================
     // Todo: AdminService로 옮길지 고민하기
-    // Todo: 관리자/최고관리자 권한 검증
     // Todo: Paging
 
     // [우선순위: 상] 상품 생성

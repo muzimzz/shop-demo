@@ -19,16 +19,15 @@ public class MemberJoinRequest {
 
     private String email;
 
-    private String telno;
+    private String phone;
 
     public Member toEntity(String encodedPassword) {
         return Member.builder()
                 .name(this.name)
                 .password(encodedPassword)
                 .email(this.email)
-                .telno(this.telno)
+                .phone(this.phone)
                 .status(MemberStatus.ACTIVE)
                 .build();
     }
-
 }

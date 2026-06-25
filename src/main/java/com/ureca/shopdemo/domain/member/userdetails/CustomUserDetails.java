@@ -9,7 +9,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
@@ -39,7 +38,7 @@ public class CustomUserDetails implements UserDetails, Serializable {
 
     @Override
     public boolean isAccountNonExpired() {
-        return member.getExpiredAt() == null || member.getExpiredAt().isAfter(LocalDateTime.now());
+        return true;    // expiredAt 제거 - 만료 개념 미사용
     }
 
     @Override
@@ -55,6 +54,8 @@ public class CustomUserDetails implements UserDetails, Serializable {
 
     @Override
     public boolean isEnabled() {
-        return member.getStatus() == MemberStatus.ACTIVE;
+        // ACTIVE 상태이고 탈퇴하지 않은 회원만 활성화
+        return member.getStatus() == MemberStatus.ACTIVE
+                && member.getDeletedAt() == null;
     }
 }

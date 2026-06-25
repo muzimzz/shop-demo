@@ -19,22 +19,19 @@ public class MemberDetailResponse {
 
     private String email;
 
-    private String telno;
+    private String phone;
 
-    private LocalDateTime expiredAt;
-
-    private boolean isBlocked = false;
+    private boolean isBlocked;
 
     private LocalDateTime blockedAt;
 
     List<MemberAddressResponse> addressList;
 
-    public static MemberDetailResponse toDto (Member member, List<MemberAddress> memberAddressList) {
+    public static MemberDetailResponse toDto(Member member, List<MemberAddress> memberAddressList) {
         return MemberDetailResponse.builder()
                 .name(member.getName())
                 .email(member.getEmail())
-                .telno(member.getTelno())
-                .expiredAt(member.getExpiredAt())
+                .phone(member.getPhone())
                 .isBlocked(member.isBlocked())
                 .blockedAt(member.getBlockedAt())
                 .addressList(memberAddressList.stream()
@@ -42,5 +39,4 @@ public class MemberDetailResponse {
                         .toList())
                 .build();
     }
-
 }

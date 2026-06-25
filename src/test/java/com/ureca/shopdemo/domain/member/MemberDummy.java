@@ -12,15 +12,18 @@ public class MemberDummy {
                 .id(1L)
                 .name("홍길동")
                 .email("test@example.com")
+                .status(MemberStatus.ACTIVE)
                 .build();
     }
 
-    public static Member createExpiredMockMember() {
+    // expiredAt 제거 → deletedAt으로 대체 (탈퇴된 회원 테스트용)
+    public static Member createDeletedMockMember() {
         return Member.builder()
                 .id(1L)
                 .name("홍길동")
                 .email("test@example.com")
-                .expiredAt(LocalDateTime.of(2000, 1, 1, 1, 1))
+                .status(MemberStatus.WITHDRAW)
+                .deletedAt(LocalDateTime.of(2000, 1, 1, 1, 1))
                 .build();
     }
 
@@ -31,7 +34,7 @@ public class MemberDummy {
         ReflectionTestUtils.setField(request, "email", "test@example.com");
         ReflectionTestUtils.setField(request, "password", "test");
         ReflectionTestUtils.setField(request, "passwordConfirm", "test");
-        ReflectionTestUtils.setField(request, "telno", "1");
+        ReflectionTestUtils.setField(request, "phone", "1");   // telno → phone
 
         return request;
     }
@@ -43,7 +46,7 @@ public class MemberDummy {
         ReflectionTestUtils.setField(request, "email", "test@example.com");
         ReflectionTestUtils.setField(request, "password", "test");
         ReflectionTestUtils.setField(request, "passwordConfirm", "test");
-        ReflectionTestUtils.setField(request, "telno", "2");
+        ReflectionTestUtils.setField(request, "phone", "2");   // telno → phone
 
         return request;
     }

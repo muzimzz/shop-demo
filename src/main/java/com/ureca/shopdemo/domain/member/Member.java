@@ -31,19 +31,24 @@ public class Member extends BaseTimeEntity implements Serializable {
     @Column(unique = true)
     private String email;
 
-    private String telno;
+    @Column(unique = true)
+    private String phone;
+
+    @Column(nullable = false)
+    private boolean marketingAgreed = false;
 
     @Enumerated(EnumType.STRING)
     private MemberStatus status;
-
-    private LocalDateTime expiredAt;
 
     @Column(nullable = false)
     private boolean isBlocked = false;
 
     private LocalDateTime blockedAt;
 
+    private LocalDateTime deletedAt;    // 소프트딜리트 (탈퇴 시 세팅)
+
     public void withdraw() {
         this.status = MemberStatus.WITHDRAW;
+        this.deletedAt = LocalDateTime.now();
     }
 }

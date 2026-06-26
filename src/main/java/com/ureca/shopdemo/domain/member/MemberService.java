@@ -7,9 +7,13 @@ import com.ureca.shopdemo.domain.member.dto.MemberResponse;
 import com.ureca.shopdemo.global.exception.ErrorCode;
 import com.ureca.shopdemo.global.exception.GeneralException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -61,4 +65,41 @@ public class MemberService {
 
         member.withdraw();
     }
+
+    // ==================== Admin ====================
+
+    // 회원 목록 조회 (페이징)
+    public Page<MemberResponse> getMembers(Pageable pageable) {
+
+        return memberRepository.findAll(pageable)
+                .map(MemberResponse::toDto);
+    }
+
+    // 회원 상세 조회
+    public MemberResponse getMember(Long memberId) {
+
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(IllegalArgumentException::new);
+
+        return MemberResponse.toDto(member);
+    }
+
+    // 회원 차단
+    public void blockMember(Long memberId) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(IllegalArgumentException::new);
+
+        member.block();
+    }
+
+    // 회원 차단 해제
+    public void unblockMember(Long memberId) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(IllegalArgumentException::new);
+
+        member.unblock();
+    }
+
+    // 강제 탈퇴
+    public void forceWithdraw(Long memberId) {}
 }

@@ -63,8 +63,8 @@ public class ProductService {
     }
 
     // [우선순위: 상] 상품 삭제 (소프트 딜리트)
-    public void deleteProduct(Long id) {
-        Product product = productRepository.findById(id)
+    public void deleteProduct(Long productId) {
+        Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new GeneralException(ErrorCode.PRODUCT_NOT_FOUND));
 
         product.softDeleteProduct();

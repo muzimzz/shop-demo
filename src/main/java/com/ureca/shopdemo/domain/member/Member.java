@@ -51,4 +51,14 @@ public class Member extends BaseTimeEntity implements Serializable {
         this.status = MemberStatus.WITHDRAW;
         this.deletedAt = LocalDateTime.now();
     }
+
+    public void block() {
+        this.isBlocked = true;
+        this.blockedAt = LocalDateTime.now();
+    }
+
+    public void unblock() {
+        this.isBlocked = false;
+        this.blockedAt = null;
+    }
 }
